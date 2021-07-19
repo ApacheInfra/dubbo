@@ -61,7 +61,7 @@ public class ShortestResponseLoadBalance extends AbstractLoadBalance {
             RpcStatus rpcStatus = RpcStatus.getStatus(invoker.getUrl(), invocation.getMethodName());
             // Calculate the estimated response time from the product of active connections and succeeded average elapsed time.
             long succeededAverageElapsed = rpcStatus.getSucceededAverageElapsed();
-            int active = rpcStatus.getActive();
+            int active = rpcStatus.getActive() + 1;
             long estimateResponse = succeededAverageElapsed * active;
             int afterWarmup = getWeight(invoker, invocation);
             weights[i] = afterWarmup;
