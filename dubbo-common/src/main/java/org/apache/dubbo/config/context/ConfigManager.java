@@ -663,12 +663,15 @@ public class ConfigManager extends LifecycleAdapter implements FrameworkExt {
 
         String key = getId(config);
         if (key == null) {
-            // generate key for non-default config compatible with API usages
-            key = generateConfigId(config);
+            do {
+                // generate key if id is not set
+                key = generateConfigId(config);
+            } while (configsMap.containsKey(key));
         }
 
         C existedConfig = configsMap.putIfAbsent(key, config);
-        if (isEquals(existedConfig, config)) {
+        // should not found existed config here
+        if (existedConfig != null) {
             String type = config.getClass().getSimpleName();
             throw new IllegalStateException(String.format("Duplicate %s found, there already has one default %s or more than two %ss have the same id, " +
                     "you can try to give each %s a different id, key: %s, prev: %s, new: %s", type, type, type, type, key, existedConfig, config));
