@@ -319,6 +319,8 @@ public class DubboProtocol extends AbstractProtocol {
                     server = serverMap.get(key);
                     if (server == null) {
                         serverMap.put(key, createServer(url));
+                    }else {
+                        server.reset(url);
                     }
                 }
             } else {
